@@ -1,0 +1,9 @@
+"dec2","hex1","hex2","hex3","modrm","#operands","operand1","operand2","66H ?","REP ?","REPNZ ?","mnemonic","#asm_operands","asm operand1","asm operand2","asm operand3","eflags","fpu flags","exception fpu","exception p","exception r","exception v"
+217,"9B","D9",,"/7",0,,,FALSE,,,"fstcw",1,"m 16",,,,,,,,
+217,"9B","D9",,"/6",0,,,TRUE,,,"fstenv",1,"m 112/224",,,,,,,,
+219,"9B","DB","E2",,0,,,FALSE,,,"fclex",0,,,,,,,,,
+219,"9B","DB","E3",,0,,,FALSE,,,"finit",0,,,,,,,,,
+221,"9B","DD",,"/6",0,,,TRUE,,,"fsave",1,"m 752/864",,,,,,,,
+221,"9B","DD",,"/7",0,,,FALSE,,,"fstsw",1,"m 16",,,,,,,,
+223,"9B","DF","E0",,0,,,FALSE,,,"fstsw",1,"ax",,,,,,,,
+144,"F3",90,,,0,,,FALSE,,,"pause",0,,,,,,,,,

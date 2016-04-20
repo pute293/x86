@@ -24,6 +24,17 @@ module X86
 
 class Parser
   
+  class InstBuffer < Array
+    
+    def to_s
+      result = self.collect{|inst| ret = inst.to_s.split(?\t); ret << '' while ret.size < 4; ret }
+      len1, len2, len3, len4 = result.transpose.collect{|col| col.max_by{|s|s.size}.size}
+      result.collect!{|col1, col2, col3, col4| col1.ljust(len1+2) + col2.ljust(len2+2) + col3.ljust(len3+2) + col4}
+      result.join(?\n)
+    end
+    
+  end
+  
   def self.disas(code_or_file, bits=32, base_eip: 0)
     if code_or_file.kind_of?(Array)
       code_or_file = code_or_file.collect{|x| (x & 0xff).chr}.join.b
@@ -40,7 +51,7 @@ class Parser
   end
   
   def self.__disas__(code, bits=32, base_eip=0)
-    instructions = []
+    instructions = InstBuffer.new
     
     io = StringIO.new(code.b, 'rb:ASCII-8BIT')
     prefix = Prefix.new(bits == 32)
@@ -67,8 +78,8 @@ class Parser
         end
       end
       #instructions << inst.to_s
-      instructions << inst.to_a
-      #instructions << inst
+      #instructions << inst.to_a
+      instructions << inst
       prefix.clear
     end
     
@@ -127,7 +138,7 @@ end
 #puts Parser.disas("\xaa\xb0\xaa\xab")
 #puts Parser.disas("\xf0\x37\x66\x06\x66\x91\x05\x10\x20\x30\x40\xa1\x00\x00\x00\x00\xa3\x00\x01\x00\x00\xe7\x01\xef\x6a\x01\xc8\xff\xff\xff\xff\xff\x2e\x00\x00\x67\x02\x00\x67\x00\x80\xab\xab\x62\x00\x66\x67\x6b\x00\xab\x8d\xc0\xc0\x01\xc4\x00\xc7\x00\xab\xab\xab\xab\xd3\x00\xff\xd0\x05\x00\x00\x00\x00\xf3\x90\x06")
 #puts Parser.disas("\x00\x00")
-#puts Parser.disas("./a")
+#puts Parser.disas("#{__dir__}/test/a")
 #puts Parser.disas("\x0F\x01\xC8\x0f\x01\x38")
 #puts Parser.disas("\x0f\x10\x00\x0f\x10\xc0\x0f\x12\x00\x0f\x12\xc0\x0f\x16\x00\x0f\x16\xc1")
 #puts Parser.disas("\xeb\x05\xea\x00\x20\x40\x00\x2b\x00\x66\xe9\x01\x00\x00\x00")
